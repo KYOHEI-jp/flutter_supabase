@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_supabase/pages/home_page.dart';
+import 'package:flutter_supabase/pages/start_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -25,7 +26,34 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage()
+      home: const AuthPage()
     );
+  }
+}
+
+class AuthPage extends StatefulWidget {
+  const AuthPage({Key? key}) : super(key: key);
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  final SupabaseClient supabase = Supabase.instance.client;
+  User? _user;
+
+  // To get current user: supabase.auth.currentUser
+
+  Future<void> _getAuth() async {
+    setState(() {
+      _user = supabase.auth.currentUser;
+    });
+    supabase.auth.onAuthStateChange;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // もしユーザーがnullならStartPageへ、そうでなければHomePageへ
+    return _user == null ? const StartPage() : HomePage();
   }
 }
