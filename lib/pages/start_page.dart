@@ -44,15 +44,41 @@ class _StartPageState extends State<StartPage> {
                   ),
                   const SizedBox(height: 25),
                   // Email Field
-                  TextFormField(),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null) {
+                        return "Field is required";
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      label: Text("Email"),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
 
                   // Password Field
-                  TextFormField(),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Field is required";
+                      }
+                      return null;
+                    },
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      label: Text("Password"),
+                    ),
+                    obscureText: true,
+                  ),
                   const SizedBox(height: 25),
                   ElevatedButton(
                     onPressed: () {},
                     child: Text("Sign In"),
                   ),
+                  const Divider(),
+                  OutlinedButton(onPressed: () {}, child: Text("Sign up"))
                 ],
               ),
             ),
