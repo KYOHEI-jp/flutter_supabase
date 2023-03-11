@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const AuthPage()
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Supabase',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const AuthPage());
   }
 }
 
@@ -42,13 +42,24 @@ class _AuthPageState extends State<AuthPage> {
   final SupabaseClient supabase = Supabase.instance.client;
   User? _user;
 
+  // ウィジェット作成時に任意の処理を行える
+  @override
+  void initState() {
+    _getAuth();
+    super.initState();
+  }
+
   // To get current user: supabase.auth.currentUser
 
   Future<void> _getAuth() async {
     setState(() {
       _user = supabase.auth.currentUser;
     });
-    supabase.auth.onAuthStateChange;
+    supabase.auth.onAuthStateChange.listen((event) {
+      setState(() {
+        _user = event.session?.user;
+      });
+    });
   }
 
   @override
