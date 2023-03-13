@@ -20,7 +20,7 @@ class _StartPageState extends State<StartPage> {
   // Sign up Functionality
   // syntax : supabase.auth.signup(email: "", password:"");
   // Sign in Syntax : supabase.auth/signInWithPassword(email: "", password: "");
-  
+
 
 
   @override
