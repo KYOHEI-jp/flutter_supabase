@@ -89,34 +89,22 @@ class _StartPageState extends State<StartPage> {
                               return;
                             }
                             setState(() {
-                              _signUpLoading = true;
+                              _signInLoading = true;
                             });
                             try {
-                              await supabase.auth.signUp(
+                              await supabase.auth.signInWithPassword(
                                   email: _emailController.text,
                                   password: _passwordController.text);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text("Success ! Confirmation Email sent"),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                              setState(
-                                () {
-                                  _signUpLoading = false;
-                                },
-                              );
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Sign up failed"),
+                                  content: Text("Sign In failed"),
                                   backgroundColor: Colors.red,
                                 ),
                               );
                               setState(
                                 () {
-                                  _signUpLoading = false;
+                                  _signInLoading = false;
                                 },
                               );
                             }
