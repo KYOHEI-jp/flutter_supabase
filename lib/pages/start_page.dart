@@ -21,8 +21,6 @@ class _StartPageState extends State<StartPage> {
   // syntax : supabase.auth.signup(email: "", password:"");
   // Sign in Syntax : supabase.auth/signInWithPassword(email: "", password: "");
 
-
-
   @override
   void dispose() {
     supabase.dispose();
@@ -80,10 +78,51 @@ class _StartPageState extends State<StartPage> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 25),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Sign In"),
-                  ),
+                  _signInLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ElevatedButton(
+                          onPressed: () async {
+                            final isValid = _formKey?.currentState?.validate();
+                            if (isValid != true) {
+                              return;
+                            }
+                            setState(() {
+                              _signUpLoading = true;
+                            });
+                            try {
+                              await supabase.auth.signUp(
+                                  email: _emailController.text,
+                                  password: _passwordController.text);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text("Success ! Confirmation Email sent"),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              setState(
+                                () {
+                                  _signUpLoading = false;
+                                },
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Sign up failed"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              setState(
+                                () {
+                                  _signUpLoading = false;
+                                },
+                              );
+                            }
+                          },
+                          child: Text("Sign In"),
+                        ),
                   const Divider(),
                   _signInLoading
                       ? const Center(child: CircularProgressIndicator())
